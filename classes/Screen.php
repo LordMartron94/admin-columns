@@ -86,12 +86,16 @@ class Screen implements Registerable {
 	 */
 	public function get_list_screen() {
 		foreach ( ListScreenTypes::instance()->get_list_screens() as $list_screen ) {
-			if ( $list_screen->is_current_screen( $this->screen ) ) {
+			if ( $this->is_current_screen( $list_screen ) ) {
 				return $list_screen->get_key();
 			}
 		}
 
 		return null;
+	}
+
+	public function is_current_screen( ListScreen $list_screen ): bool {
+		return $list_screen->is_current_screen( $this->screen );
 	}
 
 	/**

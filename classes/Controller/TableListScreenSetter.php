@@ -5,11 +5,9 @@ namespace AC\Controller;
 use AC\Asset\Location\Absolute;
 use AC\ColumnSize;
 use AC\ListScreenRepository\Storage;
-use AC\ListScreenTypes;
 use AC\Registerable;
 use AC\Request;
 use AC\Table;
-use AC\Type\ListScreenId;
 use WP_Screen;
 
 class TableListScreenSetter implements Registerable {
@@ -44,18 +42,9 @@ class TableListScreenSetter implements Registerable {
 			)
 		);
 
-		$list_key = $request->get( 'list_key' );
-		$list_id = $request->get( 'list_id' );
+		do_action( 'ac/table/list/request', $request );
 
-		$list_screen = null;
-
-		if ( ListScreenId::is_valid_id( $list_id ) ) {
-			$list_screen = $this->storage->find( new ListScreenId( $list_id ) );
-		}
-
-		if ( ! $list_screen && $list_key && is_string( $list_key ) ) {
-			$list_screen = ListScreenTypes::instance()->get_list_screen_by_key( $list_key );
-		}
+		$list_screen = $request->get( 'list_screen_object' );
 
 		if ( ! $list_screen ) {
 			return;

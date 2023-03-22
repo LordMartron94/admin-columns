@@ -16,9 +16,6 @@ use WP_User;
 
 class ListScreenTable implements Middleware {
 
-	private const PARAM_LIST_ID = 'list_id';
-	private const PARAM_LIST_KEY = 'list_key';
-
 	private $storage;
 
 	private $wp_screen;
@@ -71,8 +68,7 @@ class ListScreenTable implements Middleware {
 		}
 
 		$request->get_parameters()->merge( [
-			self::PARAM_LIST_KEY => $list_screen ? $list_screen->get_key() : null,
-			self::PARAM_LIST_ID  => $list_screen && $list_screen->has_id() ? (string) $list_screen->get_id() : null,
+			'list_screen_object' => $list_screen,
 		] );
 	}
 
