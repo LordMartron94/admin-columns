@@ -6,9 +6,9 @@ use AC\Admin\Preference;
 use AC\Admin\ScreenOption;
 use AC\Preferences;
 
-class ListScreenId extends ScreenOption {
+class ListScreenSource extends ScreenOption {
 
-	private const KEY = 'show_list_screen_id';
+	private const KEY = 'show_list_screen_source';
 
 	/**
 	 * @var Preferences\User
@@ -27,9 +27,9 @@ class ListScreenId extends ScreenOption {
 		ob_start();
 		?>
 
-		<label for="ac-list-screen-id" data-ac-screen-option="<?= self::KEY; ?>">
-			<input id="ac-list-screen-id" type="checkbox" <?php checked( $this->is_active() ); ?>>
-			<?= __( 'List Screen ID', 'codepress-admin-columns' ); ?>
+		<label for="ac-list-screen-source" data-ac-screen-option="<?= self::KEY; ?>">
+			<input id="ac-list-screen-source" type="checkbox" <?php checked( $this->is_active() ); ?>>
+			<?= __( 'Source', 'codepress-admin-columns' ); ?>
 		</label>
 		<?php
 		return ob_get_clean();
