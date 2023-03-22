@@ -6,16 +6,8 @@ declare const ajaxurl: string;
 declare const AC: LocalizedAcColumnSettings;
 
 export default class InfoScreenOption {
-    input: HTMLInputElement
-    toggleClass: string
-    container: HTMLElement
-    name: string
 
-    constructor(name: string, input: HTMLInputElement, toggleClass: string, container: HTMLElement) {
-        this.name = name;
-        this.input = input;
-        this.toggleClass = toggleClass;
-        this.container = container;
+    constructor(private name: string, private input: HTMLInputElement, private toggleClass: string, private container: HTMLElement, private nonce: string) {
         this.initEvents();
     }
 
@@ -32,7 +24,8 @@ export default class InfoScreenOption {
     persist(){
         axios.post( ajaxurl, mapDataToFormData({
             action: 'ac_admin_screen_options',
-            _ajax_nonce: AC._ajax_nonce,
+            _ajax_nonce: this.nonce,
+            //_ajax_nonce: AC._ajax_nonce,
             option_name: this.name,
             option_value: this.input.checked ? 1 : 0
         }))
