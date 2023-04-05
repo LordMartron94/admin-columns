@@ -4,6 +4,8 @@ namespace AC\Controller;
 
 use AC\Asset\Location\Absolute;
 use AC\ColumnSize;
+use AC\ListScreen;
+use AC\ListScreenFactory;
 use AC\ListScreenRepository\Storage;
 use AC\Registerable;
 use AC\Request;
@@ -16,14 +18,18 @@ class TableListScreenSetter implements Registerable {
 
 	private $location;
 
+	private $list_screen_factory;
+
 	private $preference;
 
 	public function __construct(
 		Storage $storage,
 		Absolute $location,
+		ListScreenFactory $list_screen_factory,
 		Table\LayoutPreference $preference
 	) {
 		$this->storage = $storage;
+		$this->list_screen_factory = $list_screen_factory;
 		$this->location = $location;
 		$this->preference = $preference;
 	}
@@ -34,24 +40,27 @@ class TableListScreenSetter implements Registerable {
 
 	public function handle( WP_Screen $wp_screen ): void {
 		$request = new Request();
+
 		$request->add_middleware(
 			new Middleware\ListScreenTable(
 				$this->storage,
+				$this->list_screen_factory,
 				$wp_screen,
 				$this->preference
 			)
 		);
 
+		// TODO
 		do_action( 'ac/table/list/request', $request );
 
-		$list_screen = $request->get( 'list_screen_object' );
+		$list_screen = $request->get( 'list_screen' );
 
-		if ( ! $list_screen ) {
+		if ( ! $list_screen instanceof ListScreen ) {
 			return;
 		}
 
 		if ( $list_screen->has_id() ) {
-			$this->preference->set( $list_screen->get_key(), $list_screen->get_id()->get_id() );
+			$this->preference->set( $list_screen->get_key(), (string) $list_screen->get_id() );
 		}
 
 		$table_screen = new Table\Screen(

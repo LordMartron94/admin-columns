@@ -8566,6 +8566,13 @@ const getIdFromTableRow = (row) => {
             }
         }
     }
+    if (!item_id) {
+        // TODO fix for WC with hook?
+        const orderCheckbox = row.querySelector('.check-column input[name="order[]"]');
+        if (orderCheckbox) {
+            item_id = parseInt(orderCheckbox.value);
+        }
+    }
     row.dataset.id = item_id.toString();
     return item_id;
 };
