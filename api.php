@@ -1,6 +1,6 @@
 <?php
 
-use AC\EncodedListScreenDataFactory;
+use AC\Container;
 use AC\Helper;
 use AC\ListScreen;
 use AC\ListScreenCollection;
@@ -12,7 +12,7 @@ if ( ! function_exists( 'AC' ) ) {
 		static $ac = null;
 
 		if ( $ac === null ) {
-			$ac = AC\AdminColumns::instance();
+			$ac = new AC\AdminColumns();
 		}
 
 		return $ac;
@@ -33,7 +33,7 @@ if ( ! function_exists( 'ac_helper' ) ) {
  */
 if ( ! function_exists( 'ac_get_list_screen' ) ) {
 	function ac_get_list_screen( $id ) {
-		return AC()->get_storage()->find( new ListScreenId( $id ) );
+		return Container::get_storage()->find( new ListScreenId( $id ) );
 	}
 }
 
@@ -47,7 +47,7 @@ if ( ! function_exists( 'ac_get_list_screen' ) ) {
  */
 if ( ! function_exists( 'ac_get_list_screens' ) ) {
 	function ac_get_list_screens( $key ) {
-		return AC()->get_storage()->find_all_by_key( $key );
+		return Container::get_storage()->find_all_by_key( $key );
 	}
 }
 
@@ -68,7 +68,7 @@ if ( ! function_exists( 'ac_get_column' ) ) {
 			return null;
 		}
 
-		$list_screen = AC()->get_storage()->find( $list_id );
+		$list_screen = Container::get_storage()->find( $list_id );
 
 		if ( ! $list_screen ) {
 			return null;
@@ -100,7 +100,7 @@ if ( ! function_exists( 'ac_get_columns' ) ) {
 			return [];
 		}
 
-		$list_screen = AC()->get_storage()->find( $list_id );
+		$list_screen = Container::get_storage()->find( $list_id );
 
 		if ( ! $list_screen ) {
 			return [];
@@ -148,16 +148,10 @@ function ac_get_admin_network_url( $slug = null ) {
 }
 
 /**
- * @param array|string $list_screen_keys
- * @param array        $column_data
- *
- * @deprecated 4.0.0
  * @since      2.2
  */
-function ac_register_columns( $list_screen_keys, $column_data ) {
-	foreach ( (array) $list_screen_keys as $key ) {
-		ac_load_columns( [ $key => $column_data ] );
-	}
+function ac_register_columns() {
+	_deprecated_function( __METHOD__, '4.0' );
 }
 
 /**
@@ -193,30 +187,15 @@ function ac_get_site_url( string $path = null ): string {
 }
 
 /**
- * Manually set the columns for a list screen
- * This overrides the database settings and thus renders the settings screen for this list screen useless
- * If you like to register a column of your own please have a look at our documentation.
- * We also have a free start-kit available, which contains all the necessary files.
- * Documentation: https://www.admincolumns.com/documentation/guides/creating-new-column-type/
- * Starter-kit: https://github.com/codepress/ac-column-template/
- *
- * @param array $data
- *
- * @deprecated 4.1
- * @since      4.0.0
+ * @since      4.0
  */
 if ( ! function_exists( 'ac_load_columns' ) ) {
-	function ac_load_columns( array $data ) {
-		$factory = new EncodedListScreenDataFactory();
-		$factory->create()->add( $data );
+	function ac_load_columns() {
+		_deprecated_function( __METHOD__, '4.1' );
 	}
 }
 
-/**
- * @return bool
- * @deprecated 6.0
- */
-function ac_is_pro_active() {
+function ac_is_pro_active(): bool {
 	_deprecated_function( __METHOD__, '6.0' );
 
 	return defined( 'ACP_FILE' );

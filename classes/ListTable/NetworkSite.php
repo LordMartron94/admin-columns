@@ -13,7 +13,7 @@ class NetworkSite implements ListTable {
 		$this->table = $table;
 	}
 
-	public function get_column_value( $column, $id ) {
+	public function get_column_value( string $column, int $id ): string {
 		ob_start();
 
 		$method = 'column_' . $column;
@@ -21,7 +21,7 @@ class NetworkSite implements ListTable {
 		$blog = get_site( $id );
 
 		if ( ! $blog ) {
-			return null;
+			return '';
 		}
 
 		if ( method_exists( $this->table, $method ) ) {
